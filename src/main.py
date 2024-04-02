@@ -39,4 +39,4 @@ automate_final.to_png("test_repet")
 # Test random
 test = Automate.Automate([])
 test.charger("test_mail")
-print(test.accepte_mot("test.test@lacatholille.fr"))
+print(test.accepte_mot("d.test2@lacatholille.fr"))
