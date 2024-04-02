@@ -248,3 +248,109 @@ class Automate:
                 for transition in self.transitions:
                     if (transition[0] == etat and symbole not in transition[1]):
                         self.ajouter_transition(etat, symbole, "puit")
+    
+    def est_deterministe(self):
+        if len(self.etats_init) != 1:
+            return False
+
+        for etat in self.etats:
+            for lettre in self.alphabet:
+                cpt = 0
+                for transition in self.transitions:
+                    if(transition[0] == etat and lettre in transition[1]):
+                        cpt += 1
+                if (cpt > 1):
+                    return False
+        return True
+
+    def determiniser(self):
+        # Créer un mappage des anciens états vers les nouveaux états déterministes
+        etat_map = {}
+
+        # Ajouter l'état initial déterministe
+        etats_en_attente = {frozenset(self.etats_init)}
+        nouveau_etat_init = frozenset(self.etats_init)
+        self.etats_init = {nouveau_etat_init}
+        etat_map[nouveau_etat_init] = nouveau_etat_init
+
+        # Itérer sur les états en attente jusqu'à ce qu'il n'y en ait plus
+        while etats_en_attente:
+            etat_courant = etats_en_attente.pop()
+            for symbole in self.alphabet:
+                successeurs = set()
+                for etat in etat_courant:
+                    successeurs |= self.successeurs(etat, symbole)
+                if successeurs:
+                    nouvel_etat = frozenset(successeurs)
+                    if nouvel_etat not in etat_map:
+                        self.ajouter_etat(nouvel_etat)
+                        if nouvel_etat & self.etats_term:
+                            self.etats_term.add(nouvel_etat)
+                        etat_map[nouvel_etat] = nouvel_etat
+                        etats_en_attente.add(nouvel_etat)
+                    self.ajouter_transition(etat_map[etat_courant], symbole, etat_map[nouvel_etat])
+
+        # Mettre à jour les transitions et les états terminaux de l'automate en place
+        nouvelles_transitions = [(etat_map[transition[0]], transition[1], etat_map[transition[2]]) for transition in self.transitions if transition[0] in etat_map and transition[2] in etat_map]
+        self.transitions = nouvelles_transitions
+        self.etats = set(etat_map.values())
+
+        self.renommer_etats()
+
+
+    def successeurs(self, etat, symbole):
+        destinations = set()
+        for transition in self.transitions:
+            if transition[0] == etat and symbole in transition[1]:
+                destinations.add(transition[2])
+        return destinations
+    
+    def renommer_etats(self):
+        etat_renommer = {}
+        compteur = 0
+
+        # Créer un dictionnaire pour renommer les états
+        for etat in self.etats:
+            etat_renommer[etat] = str(compteur)
+            compteur += 1
+
+        # Mettre à jour les états initiaux et terminaux en utilisant uniquement les états présents dans l'automate déterminisé
+        self.etats_init = {etat_renommer[etat] for etat in self.etats_init & self.etats}
+        self.etats_term = {etat_renommer[etat] for etat in self.etats_term & self.etats}
+
+        # Mettre à jour les transitions
+        nouvelles_transitions = []
+        for transition in self.transitions:
+            if transition[0] in etat_renommer and transition[2] in etat_renommer:
+                nouvelles_transitions.append((etat_renommer[transition[0]], transition[1], etat_renommer[transition[2]]))
+        self.transitions = nouvelles_transitions
+
+        # Mettre à jour les états de l'automate
+        self.etats = set(etat_renommer.values())
+    
+    def parcourir_a_partir(self, source, mot, cpt = 0):
+        if(cpt == len(mot)):
+            if(source in self.etats_term):
+                return True
+            else:
+                return False
+        else:
+            for transition in self.transitions:
+                if(transition[0] == source):
+                    if(mot[cpt] in transition[1]):
+                        cpt += 1
+                        # Si l'état contient une transition avec la lettre, alors on parcours à partir de l'état de destination
+                        return self.parcourir_a_partir(transition[2], mot, cpt)
+                    elif ("ε" in transition[1]):
+                        # Ou une epsilon transition : on parcours sans incrémenter
+                        return self.parcourir_a_partir(transition[2], mot, cpt)
+            return False
+
+    def accepte_mot(self, mot):
+        possibilites = []
+        # On teste les possibilités pour chaque état initial
+        for init in self.etats_init:
+            possibilites.append(self.parcourir_a_partir(init, mot))
+        return True in possibilites
+
+    

@@ -36,6 +36,7 @@ automate_final = repet_automate(automate_3)
 automate_final.to_png("test_repet")
 """
 
+# Test random
 test = Automate.Automate([])
-test.charger("test_gros")
-test.to_png("test_gros")
+test.charger("test_mail")
+print(test.accepte_mot("test.test@lacatholille.fr"))
