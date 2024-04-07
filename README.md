@@ -30,6 +30,7 @@ Les fonctions suivantes sont disponibles dans `partie_2.py` et peuvent être app
 ```
 pip install graphviz
 ```
+> Si vous rencontrez des difficultés avec le `/bin` de graphviz, téléchargez le .zip [sur le site officiel](https://graphviz.org/download/) et décompressez le /bin dans le /bin du projet
 
 2. Placez-vous dans le répertoire `src` et exécutez le fichier `main.py` :
 ```
@@ -37,6 +38,7 @@ cd projet/src
 python main.py
 ```
 
+
 ## Contribution
 
-Les contributions au projet sont les bienvenues. N'hésitez pas à ouvrir une issue ou à soumettre une pull request si vous avez des suggestions d'amélioration ou des corrections à apporter.
+Travail réalisé par Charles Iacopino et Steven Guillemet pour le cours de Théorie des langages à l'Université Catholique de Lille.
