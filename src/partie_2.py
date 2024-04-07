@@ -17,7 +17,7 @@ def union_automates(automate_1:Automate, automate_2:Automate):
         Automate: Nouvel automate représentant l'union des deux automates d'entrée.
     """
     #Initialiser le nouvel automate
-    automate_final = Automate([])
+    automate_final = Automate.Automate([])
 
     #Ajouter les deux alphabets
     automate_final.ajouter_alphabet(automate_1.alphabet)
@@ -70,7 +70,7 @@ def concat_automates(automate_1:Automate, automate_2:Automate):
         Automate: Nouvel automate représentant la concaténation des deux automates d'entrée.
     """
     #Initialiser le nouvel automate
-    automate_final = Automate([])
+    automate_final = Automate.Automate([])
 
     #Ajouter les deux alphabets
     automate_final.ajouter_alphabet(automate_1.alphabet)
