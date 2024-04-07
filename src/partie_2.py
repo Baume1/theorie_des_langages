@@ -5,13 +5,14 @@ from copy import deepcopy
 
 def union_automates(automate_1:Automate, automate_2:Automate):
     """
-    Fonction prenant deux automates en entrée et retournant leur union en créant un nouvel automate avec des 𝜖-transitions.
+    Fonction prenant deux automates en entrée et retournant leur union en créant un nouvel automate avec des ε-transitions.
+    
     Cette union implique la création d'un nouvel état initial lié aux états initiaux des deux automates d'origine, les transformant en états simples.
-
+    
     Args:
         automate_1 (Automate): Premier automate à unir.
         automate_2 (Automate): Deuxième automate à unir.
-
+    
     Returns:
         Automate: Nouvel automate représentant l'union des deux automates d'entrée.
     """
@@ -56,6 +57,18 @@ def union_automates(automate_1:Automate, automate_2:Automate):
     return automate_final
 
 def concat_automates(automate_1:Automate, automate_2:Automate):
+    """
+    Fonction prenant deux automates en entrée et retournant leur concaténation en créant un nouvel automate.
+    
+    Cette concaténation implique la création d'un état intermédiaire relié aux états terminaux du premier automate et aux états initiaux du second automate.
+    
+    Args:
+        automate_1 (Automate): Premier automate à concaténer.
+        automate_2 (Automate): Deuxième automate à concaténer.
+    
+    Returns:
+        Automate: Nouvel automate représentant la concaténation des deux automates d'entrée.
+    """
     #Initialiser le nouvel automate
     automate_final = Automate([])
 
@@ -94,6 +107,17 @@ def concat_automates(automate_1:Automate, automate_2:Automate):
     return automate_final
 
 def repet_automate(automate:Automate):
+    """
+    Fonction prenant un automate en entrée et retournant un nouvel automate représentant la répétition de l'automate d'entrée.
+    
+    Cette répétition implique la création d'un nouvel état initial et terminal relié aux états initiaux et terminaux de l'automate d'origine.
+    
+    Args:
+        automate (Automate): Automate à répéter.
+    
+    Returns:
+        Automate: Nouvel automate représentant la répétition de l'automate d'entrée.
+    """
     automate_final = deepcopy(automate) #Vu que rien n'est changé, on le copie juste (pas d'affectation sinon automate_final agit comme un pointeur)
     nouvel_etat = str(int(max(automate.etats)) + 1) #Le nouvel état est juste après l'état le plus "grand"
     automate_final.ajouter_etat(nouvel_etat, True, True) #Nouvel état terminal et initial

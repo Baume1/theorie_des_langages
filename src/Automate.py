@@ -12,6 +12,11 @@ class Automate:
         self.transitions = []
         
     def __str__(self):
+        """
+        Représentation sous forme de chaîne de caractères de l'automate.
+        
+        Cette méthode affiche l'alphabet, les états, les états initiaux, les états terminaux et les transitions de l'automate.
+        """
         print("Alphabet : ", self.alphabet)
         print("Etats : ", self.etats)
         print("Etats initiaux : ", self.etats_init)
@@ -21,14 +26,25 @@ class Automate:
             print("\t", transition[0], "--(" + self.str_symboles(transition[1]) + ")-->", transition[2])
 
     def ajouter_alphabet(self, liste):
+        """
+        Ajoute des symboles à l'alphabet de l'automate.
+        
+        Args:
+            liste (list): Liste des symboles à ajouter à l'alphabet.
+        """
         for element in liste:
             self.alphabet.add(element)
 
     def ajouter_etat(self, id, est_initial=False, est_terminal=False):
         """
-        Ajoute un état à l'automate. 
-        L'état est identifié par un identifiant unique. 
-        L'état peut être initial et/ou terminal.
+        Ajoute un état à l'automate.
+        
+        L'état est identifié par un identifiant unique. L'état peut être initial et/ou terminal.
+        
+        Args:
+            id (str): Identifiant unique de l'état.
+            est_initial (bool, optional): Indique si l'état est initial. Defaults to False.
+            est_terminal (bool, optional): Indique si l'état est terminal. Defaults to False.
         """
         self.etats.add(id)
         if(est_initial):
@@ -38,10 +54,16 @@ class Automate:
 
     def ajouter_transition(self, source, symbole, destination):
         """
-        Ajoute une transition à l'automate. 
-        La transition est définie par un état source, un symbole de l'alphabet et un état destination. 
+        Ajoute une transition à l'automate.
+        
+        La transition est définie par un état source, un symbole de l'alphabet et un état destination.
         Cette méthode peut lever une exception si la transition est invalide (état source ou destination non existante, symbole
-        non présent dans l'alphabet)
+        non présent dans l'alphabet).
+        
+        Args:
+            source (str): L'état source de la transition.
+            symbole (str): Le symbole de l'alphabet associé à la transition.
+            destination (str): L'état destination de la transition.
         """
         for transition in range(len(self.transitions)):
             if(self.transitions[transition][0] == source and self.transitions[transition][2] == destination):
@@ -50,12 +72,32 @@ class Automate:
         self.transitions.append([source, tuple(symbole), destination])
 
     def symbole_transition(self, source, destination):
+        """
+        Renvoie le symbole associé à une transition entre deux états.
+        
+        Args:
+            source (str): L'état source de la transition.
+            destination (str): L'état destination de la transition.
+        
+        Returns:
+            str: Le symbole associé à la transition, ou None si la transition n'existe pas.
+        """
         for transition in range(len(self.transitions)):
             if(self.transitions[transition][0] == source and self.transitions[transition][2] == destination):
                 return self.transitions[transition][1]
         return None
 
     def destination_transition(self, source, symbole):
+        """
+        Renvoie l'état destination d'une transition à partir d'un état source et d'un symbole.
+        
+        Args:
+            source (str): L'état source de la transition.
+            symbole (str): Le symbole de la transition.
+        
+        Returns:
+            str: L'état destination de la transition, ou None si la transition n'existe pas.
+        """
         for transition in range(len(self.transitions)):
             if(self.transitions[transition][0] == source and symbole in self.transitions[transition][1]):
                 return self.transitions[transition][2]
@@ -241,6 +283,11 @@ class Automate:
 
     #-----------------------------Finaliser l'automate-----------------------------------------
     def completer(self):
+        """
+        Complète l'automate en ajoutant un état "puit" et en créant des transitions vers cet état pour tous les symboles manquants.
+        
+        Cette méthode parcourt tous les états et tous les symboles de l'alphabet, et crée une transition vers l'état "puit" pour chaque symbole qui n'a pas de transition définie à partir de l'état courant.
+        """
         self.ajouter_etat("puit")
 
         for etat in self.etats:
@@ -250,6 +297,12 @@ class Automate:
                         self.ajouter_transition(etat, symbole, "puit")
     
     def est_deterministe(self):
+        """
+        Vérifie si l'automate est déterministe.
+        
+        Cette méthode parcourt tous les états et tous les symboles de l'alphabet, et vérifie qu'il n'y a jamais plus d'une transition sortante avec le même symbole pour un état et un symbole donnés. 
+        Si c'est le cas, l'automate est considéré comme déterministe et la méthode renvoie True, sinon elle renvoie False.
+        """
         if len(self.etats_init) != 1:
             return False
 
@@ -264,6 +317,11 @@ class Automate:
         return True
 
     def determiniser(self):
+        """
+        Déterminise l'automate.
+        
+        Cette méthode crée un nouvel automate déterministe équivalent à l'automate courant. Elle utilise un algorithme de construction d'automate déterministe à partir d'un automate non déterministe, en créant de nouveaux états qui représentent des ensembles d'états de l'automate original.
+        """
         # Créer un mappage des anciens états vers les nouveaux états déterministes
         etat_map = {}
 
@@ -299,6 +357,18 @@ class Automate:
 
 
     def successeurs(self, etat, symbole):
+        """
+        Renvoie l'ensemble des états successeurs d'un état donné pour un symbole donné.
+        
+        Cette méthode parcourt les transitions de l'automate et renvoie l'ensemble des états d'arrivée des transitions qui partent de l'état donné et qui lisent le symbole donné.
+        
+        Args:
+            etat (str): L'état dont on veut les successeurs.
+            symbole (str): Le symbole pour lequel on veut les successeurs.
+        
+        Returns:
+            set: L'ensemble des états successeurs.
+        """
         destinations = set()
         for transition in self.transitions:
             if transition[0] == etat and symbole in transition[1]:
@@ -306,6 +376,11 @@ class Automate:
         return destinations
     
     def renommer_etats(self):
+        """
+        Renomme les états de l'automate de manière séquentielle.
+        
+        Cette méthode crée un dictionnaire de correspondance entre les anciens noms d'états et les nouveaux noms d'états, puis met à jour les états initiaux, terminaux et les transitions en utilisant ces nouveaux noms.
+        """
         etat_renommer = {}
         compteur = 0
 
@@ -329,6 +404,19 @@ class Automate:
         self.etats = set(etat_renommer.values())
     
     def parcourir_a_partir(self, source, mot, cpt = 0):
+        """
+        Parcourt l'automate à partir d'un état donné en lisant un mot donné.
+        
+        Cette méthode récursive parcourt l'automate en suivant les transitions correspondant aux lettres du mot. Elle renvoie True si le mot est accepté par l'automate (i.e. si l'état final atteint est un état terminal), False sinon.
+        
+        Args:
+            source (str): L'état de départ du parcours.
+            mot (str): Le mot à parcourir.
+            cpt (int, optional): Le compteur de position dans le mot, initialisé à 0. Defaults to 0.
+        
+        Returns:
+            bool: True si le mot est accepté, False sinon.
+        """
         if(cpt == len(mot)):
             if(source in self.etats_term):
                 return True
@@ -347,6 +435,17 @@ class Automate:
             return False
 
     def accepte_mot(self, mot):
+        """
+        Vérifie si l'automate accepte un mot donné.
+        
+        Cette méthode teste si le mot donné est accepté par l'automate en appelant la méthode `parcourir_a_partir()` pour chacun des états initiaux. Elle renvoie True si le mot est accepté, False sinon.
+        
+        Args:
+            mot (str): Le mot à tester.
+        
+        Returns:
+            bool: True si le mot est accepté, False sinon.
+        """
         possibilites = []
         # On teste les possibilités pour chaque état initial
         for init in self.etats_init:

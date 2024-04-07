@@ -1,7 +1,42 @@
-### Installer graphviz avec pip -m install graphviz
+# Automate Fini Déterministe
 
-### Lancer le programme dans le répertoire src (avec py main.py dans la console) 
-> [les chemins se basent sur cette racine]
+Ce projet implémente une classe `Automate` permettant de manipuler des automates finis déterministes (AFD). La classe `Automate` fournit des méthodes pour ajouter des états, des transitions, des symboles à l'alphabet, ainsi que pour sauvegarder et charger un automate à partir d'un fichier.
 
-### N'utiliser que des noms pour appeler les fonctions et méthodes qui traitent les fichiers (notamment pour les dossiers)
-> [Les extensions et filepath sont déjà inclus dans les fonctions]
+## Fonctionnalités
+
+- Création et manipulation d'automates finis déterministes
+- Ajout d'états, de transitions et de symboles à l'alphabet
+- Sauvegarde et chargement d'un automate à partir d'un fichier texte
+- Affichage graphique de l'automate à l'aide de la bibliothèque GraphViz
+
+## Utilisation
+
+Le code principal se trouve dans le fichier `main.py` dans le répertoire `src`. Pour lancer le programme, exécutez le fichier `main.py` depuis le répertoire `src`.
+
+Les fonctions suivantes sont disponibles dans `partie_2.py` et peuvent être appellées dans le `main.py` :
+
+- `union_automates(automate_1, automate_2)` : Retourne l'union de deux automates.
+- `concat_automates(automate_1, automate_2)` : Retourne la concaténation de deux automates.
+- `repet_automate(automate)` : Retourne la répétition d'un automate.
+
+## Prérequis
+
+- Python 3.x
+- Bibliothèque GraphViz installée et accessible dans le PATH
+
+## Installation
+
+1. Installez les dépendances :
+```
+pip install graphviz
+```
+
+2. Placez-vous dans le répertoire `src` et exécutez le fichier `main.py` :
+```
+cd projet/src
+python main.py
+```
+
+## Contribution
+
+Les contributions au projet sont les bienvenues. N'hésitez pas à ouvrir une issue ou à soumettre une pull request si vous avez des suggestions d'amélioration ou des corrections à apporter.
