@@ -407,7 +407,8 @@ class Automate:
         """
         Parcourt l'automate à partir d'un état donné en lisant un mot donné.
         
-        Cette méthode récursive parcourt l'automate en suivant les transitions correspondant aux lettres du mot. Elle renvoie True si le mot est accepté par l'automate (i.e. si l'état final atteint est un état terminal), False sinon.
+        Cette méthode récursive parcourt l'automate en suivant les transitions correspondant aux lettres du mot. 
+        Elle renvoie True si le mot est accepté par l'automate (i.e. si l'état final atteint est un état terminal), False sinon.
         
         Args:
             source (str): L'état de départ du parcours.
@@ -418,11 +419,13 @@ class Automate:
             bool: True si le mot est accepté, False sinon.
         """
         if(cpt == len(mot)):
+            # Si on arrive à la fin du mot, on vérifie qu'il puisse être accepté (qu'on arrive à un état final)
             if(source in self.etats_term):
                 return True
             else:
                 return False
         else:
+            # Sinon on parcours toutes les transitions possibles avec le combo état + symbole donnés en paramètre
             for transition in self.transitions:
                 if(transition[0] == source):
                     if(mot[cpt] in transition[1]):
@@ -432,6 +435,7 @@ class Automate:
                     elif ("ε" in transition[1]):
                         # Ou une epsilon transition : on parcours sans incrémenter
                         return self.parcourir_a_partir(transition[2], mot, cpt)
+            # Si on a strictement rien trouvé à la fin du parcours, alors c'est que le mot n'est pas accepté
             return False
 
     def accepte_mot(self, mot):

@@ -2,7 +2,7 @@ import Automate
 from copy import deepcopy
 
 #---------------------------------Traitement d'automates------------------------------------------------
-
+# Les paramètres ont leur type de spécifiés pour faciliter la complétion automatique avec VSCode
 def union_automates(automate_1:Automate, automate_2:Automate):
     """
     Fonction prenant deux automates en entrée et retournant leur union en créant un nouvel automate avec des ε-transitions.
