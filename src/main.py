@@ -89,7 +89,8 @@ assert automate.accepte_mot('abb')
 # Test accepter mot avec le mail
 test = Automate.Automate([])
 test.charger("test_mail")
-print("Déterministe ?", test.est_deterministe())
+print("Est-il déterministe ? :", "oui" if test.est_deterministe() else "non")
+
 print(test.accepte_mot("steven.guillemet@lacatholille.fr"))
 print(test.accepte_mot("charles.iacopino@lacatholille.fr"))
 print(test.accepte_mot("lucien.mousin@lacatholille.fr"))

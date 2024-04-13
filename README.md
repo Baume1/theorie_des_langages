@@ -38,7 +38,6 @@ cd projet/src
 python main.py
 ```
 
-
 ## Contribution
 
 Travail réalisé par Charles Iacopino et Steven Guillemet pour le cours de Théorie des langages à l'Université Catholique de Lille.
